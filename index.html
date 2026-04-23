@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ma Boutique - Koundara</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+  :root {
+    --vert:#1a7a4a; --vert-clair:#25a862; --vert-pale:#e8f7ef;
+    --orange:#f07b22; --orange-pale:#fef3e8;
+    --rouge:#e03c3c; --rouge-pale:#fdeaea;
+    --bleu:#2563eb;
+    --gris:#f4f6f8; --gris-bord:#e2e8f0;
+    --texte:#1a202c; --texte-doux:#64748b;
+    --ombre:0 2px 12px rgba(0,0,0,0.08); --ombre-forte:0 4px 24px rgba(0,0,0,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Nunito',sans-serif;background:var(--gris);color:var(--texte);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px}
+  .header{background:linear-gradient(135deg,var(--vert) 0%,var(--vert-clair) 100%);color:white;padding:20px 16px 16px;position:sticky;top:0;z-index:100;box-shadow:var(--ombre-forte)}
+  .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+  .header h1{font-size:20px;font-weight:900;letter-spacing:-0.5px}
+  .header-date{font-size:12px;opacity:.85;font-weight:600}
+  .header-solde{font-size:13px;opacity:.9}
+  .solde-montant{font-family:'Space Mono',monospace;font-size:22px;font-weight:700}
+  .sync-indicator{display:flex;align-items:center;gap:5px;font-size:11px;opacity:.85;margin-top:4px}
+  .sync-dot{width:7px;height:7px;border-radius:50%;background:#7effc0}
+  .sync-dot.loading{background:#ffd700;animation:pulse 1s infinite}
+  .sync-dot.offline{background:#ff8888}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .nav-bas{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:white;border-top:1px solid var(--gris-bord);display:flex;box-shadow:0 -2px 12px rgba(0,0,0,0.08);z-index:100}
+  .nav-btn{flex:1;padding:10px 4px 8px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--texte-doux);transition:color .2s}
+  .nav-btn.actif{color:var(--vert)}
+  .nav-btn svg{width:22px;height:22px}
+  .page{display:none;padding:16px}
+  .page.actif{display:block}
+  .cartes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  .carte{background:white;border-radius:16px;padding:14px;box-shadow:var(--ombre)}
+  .carte-label{font-size:11px;font-weight:700;color:var(--texte-doux);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+  .carte-valeur{font-family:'Space Mono',monospace;font-size:18px;font-weight:700}
+  .carte.vert .carte-valeur{color:var(--vert)}
+  .carte.rouge .carte-valeur{color:var(--rouge)}
+  .carte.orange .carte-valeur{color:var(--orange)}
+  .carte.bleu .carte-valeur{color:var(--bleu)}
+  .carte-icone{font-size:20px;margin-bottom:6px}
+  .section-titre{font-size:15px;font-weight:800;color:var(--texte);margin:20px 0 10px;display:flex;justify-content:space-between;align-items:center}
+  .form-card{background:white;border-radius:16px;padding:16px;box-shadow:var(--ombre);margin-bottom:16px}
+  .form-titre{font-size:15px;font-weight:800;margin-bottom:14px}
+  .form-groupe{margin-bottom:12px}
+  .form-label{font-size:12px;font-weight:700;color:var(--texte-doux);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.4px}
+  .form-input,.form-select{width:100%;padding:11px 14px;border:2px solid var(--gris-bord);border-radius:10px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;color:var(--texte);background:var(--gris);outline:none;transition:border-color .2s}
+  .form-input:focus,.form-select:focus{border-color:var(--vert);background:white}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btn{width:100%;padding:13px;border:none;border-radius:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn:active{transform:scale(0.97)}
+  .btn-vert{background:var(--vert);color:white}
+  .btn-rouge{background:var(--rouge);color:white}
+  .btn-orange{background:var(--orange);color:white}
+  .btn-gris{background:var(--gris-bord);color:var(--texte-doux)}
+  .transaction-item{background:white;border-radius:12px;padding:12px 14px;box-shadow:var(--ombre);margin-bottom:8px;display:flex;align-items:center;gap:12px}
+  .trans-icone{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .trans-icone.entree{background:var(--vert-pale)}
+  .trans-icone.sortie{background:var(--rouge-pale)}
+  .trans-icone.credit{background:var(--orange-pale)}
+  .trans-info{flex:1;min-width:0}
+  .trans-desc{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .trans-meta{font-size:11px;color:var(--texte-doux);font-weight:600;margin-top:1px}
+  .trans-montant{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;flex-shrink:0}
+  .trans-montant.entree{color:var(--vert)}
+  .trans-montant.sortie{color:var(--rouge)}
+  .trans-montant.credit{color:var(--orange)}
+  .client-item{background:white;border-radius:12px;padding:12px 14px;box-shadow:var(--ombre);margin-bottom:8px}
+  .client-row{display:flex;align-items:center;gap:12px}
+  .client-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#f5a623);display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:16px;flex-shrink:0}
+  .client-info{flex:1}
+  .client-nom{font-size:14px;font-weight:800}
+  .client-detail{font-size:11px;color:var(--texte-doux);font-weight:600;margin-top:2px}
+  .client-dette{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--rouge);flex-shrink:0}
+  .btn-rembourser{width:100%;margin-top:10px;padding:9px;background:var(--vert-pale);color:var(--vert);border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+  .modal-overlay.open{opacity:1;pointer-events:all}
+  .modal-box{background:white;border-radius:20px 20px 0 0;padding:24px 16px 36px;width:100%;max-width:480px;transform:translateY(100%);transition:transform .3s ease}
+  .modal-overlay.open .modal-box{transform:translateY(0)}
+  .modal-titre{font-size:17px;font-weight:900;margin-bottom:4px}
+  .modal-sous{font-size:13px;color:var(--texte-doux);font-weight:700;margin-bottom:16px}
+  .modal-info{background:var(--orange-pale);border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;color:var(--orange);margin-bottom:14px}
+  .modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .rapport-jour{background:white;border-radius:16px;padding:16px;box-shadow:var(--ombre);margin-bottom:12px}
+  .rapport-date{font-size:13px;font-weight:800;color:var(--texte-doux);margin-bottom:10px}
+  .rapport-ligne{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--gris-bord);font-size:13px}
+  .rapport-ligne:last-child{border-bottom:none;font-weight:800;font-size:14px}
+  .rapport-ligne span:last-child{font-family:'Space Mono',monospace;font-weight:700}
+  .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:800}
+  .badge-vert{background:var(--vert-pale);color:var(--vert)}
+  .vide{text-align:center;padding:40px 20px;color:var(--texte-doux);font-size:14px;font-weight:600}
+  .vide-icone{font-size:40px;margin-bottom:10px}
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--texte);color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .btn-wa{display:flex;align-items:center;gap:8px;background:#25D366;color:white;border:none;border-radius:10px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer}
+  .btn-wa:active{transform:scale(0.97)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>🛒 Ma Boutique</h1>
+      <div class="header-date" id="headerDate"></div>
+    </div>
+    <div style="text-align:right">
+      <div class="header-solde">Caisse du jour</div>
+      <div class="solde-montant" id="headerSolde">0 GNF</div>
+    </div>
+  </div>
+  <div class="sync-indicator">
+    <div class="sync-dot loading" id="syncDot"></div>
+    <span id="syncLabel">Connexion...</span>
+  </div>
+</div>
+
+<!-- ACCUEIL -->
+
+<div class="page actif" id="page-accueil">
+  <div class="cartes-grid" style="margin-top:8px">
+    <div class="carte vert"><div class="carte-icone">💰</div><div class="carte-label">Entrées</div><div class="carte-valeur" id="totalEntrees">0</div></div>
+    <div class="carte rouge"><div class="carte-icone">📤</div><div class="carte-label">Sorties</div><div class="carte-valeur" id="totalSorties">0</div></div>
+    <div class="carte orange"><div class="carte-icone">🤝</div><div class="carte-label">Crédits</div><div class="carte-valeur" id="totalCredits">0</div></div>
+    <div class="carte bleu"><div class="carte-icone">📊</div><div class="carte-label">Bénéfice</div><div class="carte-valeur" id="totalBenefice">0</div></div>
+  </div>
+  <div class="section-titre">Dernières opérations <span class="badge badge-vert" id="nbOps">0 aujourd'hui</span></div>
+  <div id="listeAccueil"></div>
+</div>
+
+<!-- SAISIE -->
+
+<div class="page" id="page-saisie">
+  <div class="form-card" style="margin-top:8px">
+    <div class="form-titre">💰 Enregistrer une vente</div>
+    <div class="form-groupe"><label class="form-label">Description</label><input class="form-input" id="entreeDesc" placeholder="Ex: Savons, huile, légumes..." type="text"></div>
+    <div class="form-row">
+      <div class="form-groupe"><label class="form-label">Montant (GNF)</label><input class="form-input" id="entreeMontant" placeholder="0" type="number" inputmode="numeric"></div>
+      <div class="form-groupe"><label class="form-label">Catégorie</label>
+        <select class="form-select" id="entreeCategorie">
+          <option>🥫 Alimentation générale</option>
+          <option>🧹 Produits ménagers</option>
+          <option>🥤 Boissons</option>
+          <option>📦 Autres</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-vert" onclick="ajouterEntree()">✅ Enregistrer la vente</button>
+  </div>
+  <div class="form-card">
+    <div class="form-titre">📤 Enregistrer une dépense</div>
+    <div class="form-groupe"><label class="form-label">Description</label><input class="form-input" id="sortieDesc" placeholder="Ex: Achat stock fournisseur..." type="text"></div>
+    <div class="form-row">
+      <div class="form-groupe"><label class="form-label">Montant (GNF)</label><input class="form-input" id="sortieMontant" placeholder="0" type="number" inputmode="numeric"></div>
+      <div class="form-groupe"><label class="form-label">Type</label>
+        <select class="form-select" id="sortieType">
+          <option>🥫 Alimentation générale</option>
+          <option>🧹 Produits ménagers</option>
+          <option>🥤 Boissons</option>
+          <option>📦 Autres</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-rouge" onclick="ajouterSortie()">📤 Enregistrer la dépense</button>
+  </div>
+  <div class="form-card">
+    <div class="form-titre">🤝 Vente à crédit</div>
+    <div class="form-groupe"><label class="form-label">Nom du client</label><input class="form-input" id="creditNom" placeholder="Nom et prénom..." type="text"></div>
+    <div class="form-row">
+      <div class="form-groupe"><label class="form-label">Montant (GNF)</label><input class="form-input" id="creditMontant" placeholder="0" type="number" inputmode="numeric"></div>
+      <div class="form-groupe"><label class="form-label">Article(s)</label><input class="form-input" id="creditArticle" placeholder="Quoi..." type="text"></div>
+    </div>
+    <button class="btn btn-orange" onclick="ajouterCredit()">🤝 Enregistrer le crédit</button>
+  </div>
+</div>
+
+<!-- CLIENTS -->
+
+<div class="page" id="page-clients">
+  <div style="margin-top:8px;margin-bottom:16px">
+    <div class="cartes-grid">
+      <div class="carte orange"><div class="carte-icone">👥</div><div class="carte-label">Clients</div><div class="carte-valeur" id="nbClients">0</div></div>
+      <div class="carte rouge"><div class="carte-icone">💸</div><div class="carte-label">Total dû</div><div class="carte-valeur" id="totalDu">0</div></div>
+    </div>
+  </div>
+  <div class="section-titre">Crédits en cours</div>
+  <div id="listeClients"></div>
+</div>
+
+<!-- RAPPORT -->
+
+<div class="page" id="page-rapport">
+  <div style="margin-top:8px">
+    <div class="section-titre">
+      Rapport du jour
+      <button class="btn-wa" onclick="partagerWhatsApp()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </button>
+    </div>
+    <div id="rapportContenu"></div>
+    <div class="section-titre" style="margin-top:24px">Historique par jour</div>
+    <div id="historiqueJours"></div>
+    <div style="margin-top:24px">
+      <button class="btn btn-gris" onclick="ouvrirConfirm()">🗑️ Réinitialiser les données</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+
+<nav class="nav-bas">
+  <button class="nav-btn actif" id="nav-accueil" onclick="allerPage('accueil')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Accueil
+  </button>
+  <button class="nav-btn" id="nav-saisie" onclick="allerPage('saisie')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Saisie
+  </button>
+  <button class="nav-btn" id="nav-clients" onclick="allerPage('clients')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Crédits
+  </button>
+  <button class="nav-btn" id="nav-rapport" onclick="allerPage('rapport')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>Rapport
+  </button>
+</nav>
+
+<!-- MODAL REMBOURSEMENT -->
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-titre">✅ Remboursement</div>
+    <div class="modal-sous" id="modalSous"></div>
+    <div class="form-groupe">
+      <label class="form-label">Montant remboursé (GNF)</label>
+      <input class="form-input" id="modalMontant" placeholder="0" type="number" inputmode="numeric">
+    </div>
+    <div class="modal-info" id="modalInfo">Reste dû : —</div>
+    <div class="modal-btns">
+      <button class="btn btn-gris" onclick="fermerModal()">Annuler</button>
+      <button class="btn btn-vert" onclick="confirmerRemboursement()">✅ Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMATION REINIT -->
+
+<div class="modal-overlay" id="confirmOverlay">
+  <div class="modal-box">
+    <div class="modal-titre">🗑️ Réinitialiser</div>
+    <div class="modal-sous">Toutes les données seront effacées définitivement. Cette action est irréversible.</div>
+    <div class="modal-btns">
+      <button class="btn btn-gris" onclick="fermerConfirm()">Annuler</button>
+      <button class="btn btn-rouge" onclick="reinitialiser()">Effacer tout</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DB_URL = 'https://boutique-koundara-default-rtdb.firebaseio.com';
+
+let data = { transactions: [], credits: [] };
+let clientEnCours = null;
+
+// FIREBASE
+async function fbGet(path) {
+  const r = await fetch(DB_URL + path + '.json');
+  return await r.json();
+}
+async function fbSet(path, value) {
+  await fetch(DB_URL + path + '.json', {
+    method: 'PUT',
+    body: JSON.stringify(value)
+  });
+}
+async function fbPush(path, value) {
+  const r = await fetch(DB_URL + path + '.json', {
+    method: 'POST',
+    body: JSON.stringify(value)
+  });
+  return await r.json();
+}
+async function fbDelete(path) {
+  await fetch(DB_URL + path + '.json', { method: 'DELETE' });
+}
+
+function setSyncStatus(status) {
+  const dot = document.getElementById('syncDot');
+  const label = document.getElementById('syncLabel');
+  dot.className = 'sync-dot';
+  if (status === 'ok') { dot.classList.add(''); label.textContent = 'Synchronisé ✓'; dot.style.background = '#7effc0'; }
+  else if (status === 'loading') { dot.classList.add('loading'); label.textContent = 'Synchronisation...'; dot.style.background = '#ffd700'; }
+  else { dot.classList.add('offline'); label.textContent = 'Hors ligne'; dot.style.background = '#ff8888'; }
+}
+
+async function chargerDonnees() {
+  setSyncStatus('loading');
+  try {
+    const transactions = await fbGet('/transactions');
+    const credits = await fbGet('/credits');
+    data.transactions = transactions ? Object.entries(transactions).map(([k,v]) => ({...v, _key: k})) : [];
+    data.credits = credits ? Object.entries(credits).map(([k,v]) => ({...v, _key: k})) : [];
+    setSyncStatus('ok');
+  } catch(e) {
+    setSyncStatus('offline');
+    toast('⚠️ Pas de connexion internet');
+  }
+  renderAccueil();
+  if (document.getElementById('page-clients').classList.contains('actif')) renderClients();
+  if (document.getElementById('page-rapport').classList.contains('actif')) renderRapport();
+}
+
+// Rechargement auto toutes les 30 secondes
+setInterval(chargerDonnees, 30000);
+
+function fm(n) { return Number(n).toLocaleString('fr-FR') + ' GNF'; }
+function today() { return new Date().toLocaleDateString('fr-FR'); }
+function now() { return new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}); }
+function dateLabel() { return new Date().toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'}); }
+
+function allerPage(nom) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('actif'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('actif'));
+  document.getElementById('page-' + nom).classList.add('actif');
+  document.getElementById('nav-' + nom).classList.add('actif');
+  chargerDonnees();
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+async function ajouterEntree() {
+  const desc = document.getElementById('entreeDesc').value.trim();
+  const montant = parseFloat(document.getElementById('entreeMontant').value);
+  if (!desc || !montant || montant <= 0) { toast('⚠️ Remplis tous les champs'); return; }
+  setSyncStatus('loading');
+  try {
+    await fbPush('/transactions', { type:'entree', desc, montant, cat: document.getElementById('entreeCategorie').value, date: today(), heure: now() });
+    document.getElementById('entreeDesc').value = '';
+    document.getElementById('entreeMontant').value = '';
+    toast('✅ Vente enregistrée !');
+    await chargerDonnees();
+  } catch(e) { setSyncStatus('offline'); toast('⚠️ Erreur de connexion'); }
+}
+
+async function ajouterSortie() {
+  const desc = document.getElementById('sortieDesc').value.trim();
+  const montant = parseFloat(document.getElementById('sortieMontant').value);
+  if (!desc || !montant || montant <= 0) { toast('⚠️ Remplis tous les champs'); return; }
+  setSyncStatus('loading');
+  try {
+    await fbPush('/transactions', { type:'sortie', desc, montant, cat: document.getElementById('sortieType').value, date: today(), heure: now() });
+    document.getElementById('sortieDesc').value = '';
+    document.getElementById('sortieMontant').value = '';
+    toast('📤 Dépense enregistrée !');
+    await chargerDonnees();
+  } catch(e) { setSyncStatus('offline'); toast('⚠️ Erreur de connexion'); }
+}
+
+async function ajouterCredit() {
+  const nom = document.getElementById('creditNom').value.trim();
+  const montant = parseFloat(document.getElementById('creditMontant').value);
+  const article = document.getElementById('creditArticle').value.trim() || 'Divers';
+  if (!nom || !montant || montant <= 0) { toast('⚠️ Remplis tous les champs'); return; }
+  setSyncStatus('loading');
+  try {
+    await fbPush('/transactions', { type:'credit', desc:'Crédit - ' + nom, montant, cat:'Crédit', date: today(), heure: now() });
+    const ex = data.credits.find(c => c.nom.toLowerCase() === nom.toLowerCase());
+    if (ex) {
+      ex.total += montant;
+      ex.achats.push({ article, montant, date: today() });
+      await fbSet('/credits/' + ex._key, { nom: ex.nom, total: ex.total, achats: ex.achats });
+    } else {
+      await fbPush('/credits', { nom, total: montant, achats: [{ article, montant, date: today() }] });
+    }
+    document.getElementById('creditNom').value = '';
+    document.getElementById('creditMontant').value = '';
+    document.getElementById('creditArticle').value = '';
+    toast('🤝 Crédit enregistré pour ' + nom);
+    await chargerDonnees();
+  } catch(e) { setSyncStatus('offline'); toast('⚠️ Erreur de connexion'); }
+}
+
+function ouvrirModal(key, total, nom) {
+  clientEnCours = { _key: key, total, nom };
+  document.getElementById('modalSous').textContent = nom + ' doit ' + fm(total);
+  document.getElementById('modalMontant').value = '';
+  document.getElementById('modalInfo').textContent = 'Reste dû : ' + fm(total);
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('modalMontant').focus(), 350);
+}
+
+document.getElementById('modalMontant').addEventListener('input', function() {
+  if (!clientEnCours) return;
+  const v = parseFloat(this.value) || 0;
+  const r = clientEnCours.total - v;
+  document.getElementById('modalInfo').textContent = r > 0 ? 'Reste dû après : ' + fm(r) : '🎉 Remboursement total !';
+});
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) fermerModal(); });
+document.getElementById('confirmOverlay').addEventListener('click', function(e) { if (e.target === this) fermerConfirm(); });
+
+function fermerModal() { document.getElementById('modalOverlay').classList.remove('open'); clientEnCours = null; }
+
+async function confirmerRemboursement() {
+  if (!clientEnCours) return;
+  const m = parseFloat(document.getElementById('modalMontant').value);
+  if (!m || m <= 0) { toast('⚠️ Saisis un montant'); return; }
+  setSyncStatus('loading');
+  try {
+    const nouveauTotal = clientEnCours.total - m;
+    await fbPush('/transactions', { type:'entree', desc:'Remboursement - ' + clientEnCours.nom, montant: m, cat:'Remboursement', date: today(), heure: now() });
+    if (nouveauTotal <= 0) {
+      await fbDelete('/credits/' + clientEnCours._key);
+      toast('🎉 ' + clientEnCours.nom + ' a tout remboursé !');
+    } else {
+      const client = data.credits.find(c => c._key === clientEnCours._key);
+      await fbSet('/credits/' + clientEnCours._key, { nom: client.nom, total: nouveauTotal, achats: client.achats });
+      toast('✅ ' + fm(m) + ' remboursé par ' + clientEnCours.nom);
+    }
+    fermerModal();
+    await chargerDonnees();
+  } catch(e) { setSyncStatus('offline'); toast('⚠️ Erreur de connexion'); }
+}
+
+function calcJour(d) {
+  const ops = data.transactions.filter(t => t.date === d);
+  const e = ops.filter(t => t.type === 'entree').reduce((s,t) => s + t.montant, 0);
+  const s = ops.filter(t => t.type === 'sortie').reduce((s,t) => s + t.montant, 0);
+  const c = ops.filter(t => t.type === 'credit').reduce((s,t) => s + t.montant, 0);
+  return { entrees:e, sorties:s, credits:c, benefice:e-s, ops };
+}
+
+function renderAccueil() {
+  const { entrees, sorties, credits, benefice, ops } = calcJour(today());
+  document.getElementById('headerDate').textContent = dateLabel();
+  document.getElementById('headerSolde').textContent = fm(entrees - sorties);
+  document.getElementById('totalEntrees').textContent = fm(entrees);
+  document.getElementById('totalSorties').textContent = fm(sorties);
+  document.getElementById('totalCredits').textContent = fm(credits);
+  const b = document.getElementById('totalBenefice');
+  b.textContent = fm(benefice); b.style.color = benefice >= 0 ? 'var(--vert)' : 'var(--rouge)';
+  document.getElementById('nbOps').textContent = ops.length + " aujourd'hui";
+  const liste = document.getElementById('listeAccueil');
+  const rec = [...ops].reverse().slice(0, 8);
+  if (!rec.length) { liste.innerHTML = '<div class="vide"><div class="vide-icone">📋</div>Aucune opération aujourd\'hui</div>'; return; }
+  liste.innerHTML = rec.map(t => `
+    <div class="transaction-item">
+      <div class="trans-icone ${t.type}">${t.type==='entree'?'💰':t.type==='sortie'?'📤':'🤝'}</div>
+      <div class="trans-info"><div class="trans-desc">${t.desc}</div><div class="trans-meta">${t.heure} · ${t.cat}</div></div>
+      <div class="trans-montant ${t.type}">${t.type==='sortie'?'-':'+'}${fm(t.montant)}</div>
+    </div>`).join('');
+}
+
+function renderClients() {
+  const total = data.credits.reduce((s,c) => s + c.total, 0);
+  document.getElementById('nbClients').textContent = data.credits.length;
+  document.getElementById('totalDu').textContent = fm(total);
+  const liste = document.getElementById('listeClients');
+  if (!data.credits.length) { liste.innerHTML = '<div class="vide"><div class="vide-icone">🎉</div>Aucun crédit en cours !</div>'; return; }
+  liste.innerHTML = data.credits.map(c => `
+    <div class="client-item">
+      <div class="client-row">
+        <div class="client-avatar">${c.nom.charAt(0).toUpperCase()}</div>
+        <div class="client-info">
+          <div class="client-nom">${c.nom}</div>
+          <div class="client-detail">${c.achats.length} achat(s) · Depuis le ${c.achats[0]?.date||''}</div>
+        </div>
+        <div class="client-dette">${fm(c.total)}</div>
+      </div>
+      <button class="btn-rembourser" onclick="ouvrirModal('${c._key}', ${c.total}, '${c.nom}')">✅ Enregistrer un remboursement</button>
+    </div>`).join('');
+}
+
+function renderRapport() {
+  const { entrees, sorties, credits, benefice } = calcJour(today());
+  const totalDu = data.credits.reduce((s,c) => s + c.total, 0);
+  document.getElementById('rapportContenu').innerHTML = `
+    <div class="rapport-jour">
+      <div class="rapport-date">📅 ${dateLabel()}</div>
+      <div class="rapport-ligne"><span>💰 Ventes du jour</span><span style="color:var(--vert)">${fm(entrees)}</span></div>
+      <div class="rapport-ligne"><span>📤 Dépenses du jour</span><span style="color:var(--rouge)">${fm(sorties)}</span></div>
+      <div class="rapport-ligne"><span>🤝 Crédits accordés</span><span style="color:var(--orange)">${fm(credits)}</span></div>
+      <div class="rapport-ligne"><span>📊 Bénéfice net</span><span style="color:${benefice>=0?'var(--vert)':'var(--rouge)'}">${fm(benefice)}</span></div>
+      <div class="rapport-ligne"><span>💸 Total crédits en cours</span><span style="color:var(--rouge)">${fm(totalDu)}</span></div>
+    </div>`;
+  const jours = [...new Set(data.transactions.map(t => t.date))].sort((a,b) => {
+    const p = s => s.split('/').map(Number);
+    const [da,ma,ya] = p(a); const [db,mb,yb] = p(b);
+    return new Date(yb,mb-1,db) - new Date(ya,ma-1,da);
+  }).slice(0, 14);
+  if (jours.length <= 1) { document.getElementById('historiqueJours').innerHTML = '<div class="vide"><div class="vide-icone">📆</div>L\'historique apparaît après plusieurs jours</div>'; return; }
+  document.getElementById('historiqueJours').innerHTML = jours.map(j => {
+    const { entrees:e, sorties:s, benefice:b } = calcJour(j);
+    return `<div class="rapport-jour">
+      <div class="rapport-date">${j}</div>
+      <div class="rapport-ligne"><span>Ventes</span><span style="color:var(--vert)">${fm(e)}</span></div>
+      <div class="rapport-ligne"><span>Dépenses</span><span style="color:var(--rouge)">${fm(s)}</span></div>
+      <div class="rapport-ligne"><span>Bénéfice</span><span style="color:${b>=0?'var(--vert)':'var(--rouge)'}">${fm(b)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function partagerWhatsApp() {
+  const { entrees, sorties, credits, benefice } = calcJour(today());
+  const totalDu = data.credits.reduce((s,c) => s + c.total, 0);
+  const txt = ['📊 *RAPPORT BOUTIQUE - ' + today() + '*','💰 Ventes : ' + fm(entrees),'📤 Dépenses : ' + fm(sorties),'🤝 Crédits : ' + fm(credits),'📊 Bénéfice : ' + fm(benefice),'💸 Dettes clients : ' + fm(totalDu)].join('\n');
+  window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+}
+
+function ouvrirConfirm() { document.getElementById('confirmOverlay').classList.add('open'); }
+function fermerConfirm() { document.getElementById('confirmOverlay').classList.remove('open'); }
+
+async function reinitialiser() {
+  setSyncStatus('loading');
+  try {
+    await fbDelete('/transactions');
+    await fbDelete('/credits');
+    data = { transactions: [], credits: [] };
+    fermerConfirm();
+    allerPage('accueil');
+    toast('🗑️ Données effacées');
+  } catch(e) { setSyncStatus('offline'); toast('⚠️ Erreur de connexion'); }
+}
+
+// INIT
+chargerDonnees();
+</script>
+
+</body>
+</html>
