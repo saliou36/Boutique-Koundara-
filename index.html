@@ -8,14 +8,14 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
   :root {
-    --vert:#1a7a4a; --vert-clair:#25a862; --vert-pale:#e8f7ef;
-    --orange:#f07b22; --orange-pale:#fef3e8;
-    --rouge:#e03c3c; --rouge-pale:#fdeaea;
-    --bleu:#2563eb; --bleu-pale:#eff6ff;
-    --violet:#7c3aed; --violet-pale:#f3f0ff;
-    --gris:#f4f6f8; --gris-bord:#e2e8f0;
-    --texte:#1a202c; --texte-doux:#64748b;
-    --ombre:0 2px 12px rgba(0,0,0,0.08); --ombre-forte:0 4px 24px rgba(0,0,0,0.14);
+    --vert:#25a862; --vert-clair:#2ecc71; --vert-pale:#0d2b1a;
+    --orange:#f07b22; --orange-pale:#2b1800;
+    --rouge:#f05252; --rouge-pale:#2b0a0a;
+    --bleu:#3b82f6; --bleu-pale:#0d1b3e;
+    --violet:#a78bfa; --violet-pale:#1e1040;
+    --gris:#1a1d23; --gris-bord:#2d3139;
+    --texte:#f0f2f5; --texte-doux:#8a9bb0;
+    --ombre:0 2px 12px rgba(0,0,0,0.4); --ombre-forte:0 4px 24px rgba(0,0,0,0.5);
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{font-family:'Nunito',sans-serif;background:var(--gris);color:var(--texte);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px}
@@ -35,7 +35,7 @@
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* NAV */
-.nav-bas{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:white;border-top:1px solid var(–gris-bord);display:flex;box-shadow:0 -2px 12px rgba(0,0,0,0.08);z-index:100}
+.nav-bas{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#22262f;border-top:1px solid var(–gris-bord);display:flex;box-shadow:0 -2px 12px rgba(0,0,0,0.08);z-index:100}
 .nav-btn{flex:1;padding:8px 2px 6px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:‘Nunito’,sans-serif;font-size:10px;font-weight:700;color:var(–texte-doux);transition:color .2s}
 .nav-btn.actif{color:var(–vert)}
 .nav-btn svg{width:20px;height:20px}
@@ -46,7 +46,7 @@
 
 /* CARTES */
 .cartes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.carte{background:white;border-radius:14px;padding:12px;box-shadow:var(–ombre)}
+.carte{background:#22262f;border-radius:14px;padding:12px;box-shadow:var(–ombre)}
 .carte-label{font-size:10px;font-weight:700;color:var(–texte-doux);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 .carte-valeur{font-family:‘Space Mono’,monospace;font-size:15px;font-weight:700}
 .carte.vert .carte-valeur{color:var(–vert)}
@@ -60,12 +60,12 @@
 .section-titre{font-size:15px;font-weight:800;color:var(–texte);margin:18px 0 10px;display:flex;justify-content:space-between;align-items:center}
 
 /* FORM */
-.form-card{background:white;border-radius:14px;padding:14px;box-shadow:var(–ombre);margin-bottom:14px}
+.form-card{background:#22262f;border-radius:14px;padding:14px;box-shadow:var(–ombre);margin-bottom:14px}
 .form-titre{font-size:14px;font-weight:800;margin-bottom:12px}
 .form-groupe{margin-bottom:10px}
 .form-label{font-size:11px;font-weight:700;color:var(–texte-doux);margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.4px}
-.form-input,.form-select{width:100%;padding:10px 12px;border:2px solid var(–gris-bord);border-radius:10px;font-family:‘Nunito’,sans-serif;font-size:14px;font-weight:600;color:var(–texte);background:var(–gris);outline:none;transition:border-color .2s}
-.form-input:focus,.form-select:focus{border-color:var(–vert);background:white}
+.form-input,.form-select{width:100%;padding:10px 12px;border:2px solid var(–gris-bord);border-radius:10px;font-family:‘Nunito’,sans-serif;font-size:14px;font-weight:600;color:var(–texte);background:#2d3139;outline:none;transition:border-color .2s}
+.form-input:focus,.form-select:focus{border-color:var(–vert);background:#33383f}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .form-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .hint{font-size:11px;color:var(–texte-doux);font-weight:600;margin-top:4px;padding:6px 10px;background:var(–bleu-pale);border-radius:8px}
@@ -76,11 +76,11 @@
 .btn-vert{background:var(–vert);color:white}
 .btn-rouge{background:var(–rouge);color:white}
 .btn-orange{background:var(–orange);color:white}
-.btn-gris{background:var(–gris-bord);color:var(–texte-doux)}
+.btn-gris{background:#2d3139;color:#8a9bb0}
 .btn-wa{display:flex;align-items:center;gap:6px;background:#25D366;color:white;border:none;border-radius:10px;padding:9px 14px;font-family:‘Nunito’,sans-serif;font-size:13px;font-weight:800;cursor:pointer}
 
 /* TRANSACTIONS */
-.transaction-item{background:white;border-radius:12px;padding:11px 13px;box-shadow:var(–ombre);margin-bottom:7px;display:flex;align-items:center;gap:10px}
+.transaction-item{background:#22262f;border-radius:12px;padding:11px 13px;box-shadow:var(–ombre);margin-bottom:7px;display:flex;align-items:center;gap:10px}
 .trans-icone{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .trans-icone.entree{background:var(–vert-pale)}
 .trans-icone.sortie{background:var(–rouge-pale)}
@@ -96,7 +96,7 @@
 .trans-montant.credit{color:var(–orange)}
 
 /* CLIENTS */
-.client-item{background:white;border-radius:12px;padding:12px 14px;box-shadow:var(–ombre);margin-bottom:8px}
+.client-item{background:#22262f;border-radius:12px;padding:12px 14px;box-shadow:var(–ombre);margin-bottom:8px}
 .client-row{display:flex;align-items:center;gap:12px}
 .client-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(–orange),#f5a623);display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:15px;flex-shrink:0}
 .client-info{flex:1}
@@ -106,7 +106,7 @@
 .btn-rembourser{width:100%;margin-top:10px;padding:9px;background:var(–vert-pale);color:var(–vert);border:none;border-radius:8px;font-family:‘Nunito’,sans-serif;font-size:13px;font-weight:800;cursor:pointer}
 
 /* ANALYSE */
-.trimestre-card{background:white;border-radius:14px;padding:14px;box-shadow:var(–ombre);margin-bottom:12px}
+.trimestre-card{background:#22262f;border-radius:14px;padding:14px;box-shadow:var(–ombre);margin-bottom:12px}
 .trim-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .trim-titre{font-size:14px;font-weight:900}
 .trim-badge{font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px}
@@ -116,24 +116,24 @@
 .trim-ligne:last-child{border-bottom:none;font-weight:800}
 .trim-ligne span:last-child{font-family:‘Space Mono’,monospace;font-weight:700}
 
-.produit-item{background:white;border-radius:14px;padding:14px;box-shadow:var(–ombre);margin-bottom:10px}
+.produit-item{background:#22262f;border-radius:14px;padding:14px;box-shadow:var(–ombre);margin-bottom:10px}
 .produit-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .produit-nom{font-size:14px;font-weight:800}
 .produit-marge-pct{font-size:16px;font-weight:900}
 .produit-bar-bg{background:var(–gris-bord);border-radius:20px;height:8px;margin-bottom:8px}
 .produit-bar{height:8px;border-radius:20px;background:linear-gradient(90deg,var(–vert),var(–vert-clair));transition:width .5s}
 .produit-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.produit-stat{background:var(–gris);border-radius:8px;padding:6px;text-align:center}
+.produit-stat{background:#2d3139;border-radius:8px;padding:6px;text-align:center}
 .produit-stat-label{font-size:10px;color:var(–texte-doux);font-weight:700}
 .produit-stat-val{font-family:‘Space Mono’,monospace;font-size:12px;font-weight:700;margin-top:2px}
 
 /* SELECTOR TRIMESTRE */
 .trim-selector{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
-.trim-btn{padding:7px 14px;border-radius:20px;border:2px solid var(–gris-bord);background:white;font-family:‘Nunito’,sans-serif;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;color:var(–texte-doux)}
+.trim-btn{padding:7px 14px;border-radius:20px;border:2px solid var(–gris-bord);background:#22262f;font-family:‘Nunito’,sans-serif;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;color:var(–texte-doux)}
 .trim-btn.actif{background:var(–vert);color:white;border-color:var(–vert)}
 
 /* RAPPORT */
-.rapport-jour{background:white;border-radius:14px;padding:14px;box-shadow:var(–ombre);margin-bottom:10px}
+.rapport-jour{background:#22262f;border-radius:14px;padding:14px;box-shadow:var(–ombre);margin-bottom:10px}
 .rapport-date{font-size:13px;font-weight:800;color:var(–texte-doux);margin-bottom:10px}
 .rapport-ligne{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(–gris-bord);font-size:13px}
 .rapport-ligne:last-child{border-bottom:none;font-weight:800}
@@ -142,7 +142,7 @@
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal-box{background:white;border-radius:20px 20px 0 0;padding:24px 16px 36px;width:100%;max-width:480px;transform:translateY(100%);transition:transform .3s ease}
+.modal-box{background:#22262f;border-radius:20px 20px 0 0;padding:24px 16px 36px;width:100%;max-width:480px;transform:translateY(100%);transition:transform .3s ease}
 .modal-overlay.open .modal-box{transform:translateY(0)}
 .modal-titre{font-size:17px;font-weight:900;margin-bottom:4px}
 .modal-sous{font-size:13px;color:var(–texte-doux);font-weight:700;margin-bottom:16px}
@@ -153,7 +153,7 @@
 .badge-vert{background:var(–vert-pale);color:var(–vert)}
 .vide{text-align:center;padding:36px 20px;color:var(–texte-doux);font-size:14px;font-weight:600}
 .vide-icone{font-size:36px;margin-bottom:10px}
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(–texte);color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:#f0f2f5;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;color:#1a1d23;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 
@@ -423,7 +423,7 @@ function majHint() {
     hint.style.color = beneficeUnit >= 0 ? 'var(--vert)' : 'var(--rouge)';
     hint.textContent = `📊 Marge: ${margePct}% | Bénéfice: ${fm(beneficeTotal)} (${qte} unité${qte>1?'s':''})`;
   } else {
-    hint.style.background='var(--bleu-pale)'; hint.style.color='var(--texte-doux)';
+    hint.style.background="#0d1b3e"; hint.style.color="#8a9bb0";
     hint.textContent='💡 Saisis les prix pour voir la marge automatiquement';
   }
 }
