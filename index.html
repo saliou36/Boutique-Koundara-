@@ -64,8 +64,10 @@
 .form-titre{font-size:14px;font-weight:800;margin-bottom:12px}
 .form-groupe{margin-bottom:10px}
 .form-label{font-size:11px;font-weight:700;color:var(–texte-doux);margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.4px}
-.form-input,.form-select{width:100%;padding:10px 12px;border:2px solid var(–gris-bord);border-radius:10px;font-family:‘Nunito’,sans-serif;font-size:14px;font-weight:600;color:var(–texte);background:#2d3139;outline:none;transition:border-color .2s}
-.form-input:focus,.form-select:focus{border-color:var(–vert);background:#33383f}
+.form-input,.form-select{width:100%;padding:10px 12px;border:2px solid var(–gris-bord);border-radius:10px;font-family:‘Nunito’,sans-serif;font-size:14px;font-weight:600;color:#ffffff;background:#2d3139;outline:none;transition:border-color .2s}
+.form-input:focus,.form-select:focus{border-color:var(–vert);background:#33383f;color:#ffffff}
+.form-input::placeholder{color:#6b7a90}
+option{background:#2d3139;color:#ffffff}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .form-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .hint{font-size:11px;color:var(–texte-doux);font-weight:600;margin-top:4px;padding:6px 10px;background:var(–bleu-pale);border-radius:8px}
@@ -220,7 +222,7 @@
         </select>
       </div>
     </div>
-    <button class="btn btn-rouge" onclick="ajouterSortie()">📤 Enregistrer la dépense</button>
+    <button class="btn btn-vert" onclick="ajouterSortie()">📤 Enregistrer la dépense</button>
   </div>
 
   <div class="form-card">
@@ -230,7 +232,7 @@
       <div class="form-groupe"><label class="form-label">Montant (GNF)</label><input class="form-input" id="creditMontant" placeholder="0" type="number" inputmode="numeric"></div>
       <div class="form-groupe"><label class="form-label">Article(s)</label><input class="form-input" id="creditArticle" placeholder="Quoi..." type="text"></div>
     </div>
-    <button class="btn btn-orange" onclick="ajouterCredit()">🤝 Enregistrer le crédit</button>
+    <button class="btn btn-vert" onclick="ajouterCredit()">🤝 Enregistrer le crédit</button>
   </div>
 </div>
 
